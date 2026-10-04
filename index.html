@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>멋쟁이 김혁선생님과 함께하는 생명기술 첫 시간</title>
+<style>
+:root{--bg:#07152b;--card:#10294d;--accent:#61dafb;--accent2:#8df0b5;--text:#f7fbff;--muted:#bfd1e6}
+*{box-sizing:border-box} body{margin:0;font-family:"Noto Sans KR","Malgun Gothic",sans-serif;background:linear-gradient(135deg,#061326,#12365b);color:var(--text)}
+main{max-width:1000px;margin:auto;padding:28px 18px 80px}
+header{text-align:center;padding:36px 12px}.tag{display:inline-block;background:#173b64;border:1px solid #4d789f;border-radius:999px;padding:8px 15px;color:#d8ebff}
+h1{font-size:clamp(32px,6vw,62px);margin:16px 0 8px}.sub{color:var(--muted);font-size:19px}
+.card{background:rgba(16,41,77,.96);border:1px solid #31597d;border-radius:24px;padding:26px;margin:22px 0;box-shadow:0 16px 40px #0005}
+.num{font-size:15px;color:var(--accent);font-weight:800;letter-spacing:.08em}.q{font-size:clamp(24px,4vw,38px);font-weight:800;margin:8px 0 20px}
+.options{display:grid;gap:12px}.option{width:100%;text-align:left;border:1px solid #47749b;background:#0a1d37;color:white;border-radius:16px;padding:18px 20px;font-size:20px;cursor:pointer;transition:.15s}
+.option:hover{transform:translateY(-2px);border-color:var(--accent)}.option.good{background:#155b45;border-color:#7ff0bc}.option.bad{background:#633047;border-color:#ff9ab7}
+.feedback{min-height:34px;margin-top:16px;font-size:18px;font-weight:700}.hidden{display:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}.topic{border:1px solid #47749b;border-radius:18px;padding:20px;background:#0b203c;cursor:pointer;min-height:135px}
+.topic b{font-size:21px}.topic p{color:var(--muted);margin-bottom:0}.topic.selected{outline:3px solid var(--accent2)}
+.reveal{margin-top:18px;padding:18px;border-radius:16px;background:#071a31;color:#dcecff}
+.video{display:inline-block;background:#e53935;color:#fff;text-decoration:none;font-weight:800;padding:14px 20px;border-radius:14px}
+footer{text-align:center;color:#9fb7cf;margin-top:40px}
+
+.dokkaebi-modal{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.86);align-items:center;justify-content:center;padding:18px}
+.dokkaebi-modal.show{display:flex}
+.dokkaebi-box{position:relative;max-width:760px;width:min(94vw,760px);max-height:94vh;text-align:center}
+.dokkaebi-box img{max-width:100%;max-height:88vh;border-radius:22px;box-shadow:0 20px 70px #000;border:4px solid #fff}
+.close-dokkaebi{position:absolute;right:-8px;top:-8px;width:48px;height:48px;border:0;border-radius:50%;background:#fff;color:#111;font-size:28px;font-weight:900;cursor:pointer;box-shadow:0 5px 20px #0008}
+
+
+.clone-modal{display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.88);align-items:center;justify-content:center;padding:18px}
+.clone-modal.show{display:flex}
+.clone-box{position:relative;max-width:1050px;width:min(96vw,1050px);max-height:94vh;text-align:center}
+.clone-box img{max-width:100%;max-height:88vh;border-radius:22px;box-shadow:0 20px 70px #000;border:4px solid #fff}
+.close-clone{position:absolute;right:-8px;top:-8px;width:48px;height:48px;border:0;border-radius:50%;background:#fff;color:#111;font-size:28px;font-weight:900;cursor:pointer}
+
+
+.monkey-modal{display:none;position:fixed;inset:0;z-index:10020;background:rgba(0,0,0,.9);align-items:center;justify-content:center;padding:18px}
+.monkey-modal.show{display:flex}
+.monkey-box{position:relative;width:min(96vw,900px);text-align:center}
+.monkey-box video{width:100%;max-height:86vh;border-radius:20px;background:#000;box-shadow:0 20px 70px #000;border:3px solid #fff}
+.close-monkey{position:absolute;right:-8px;top:-8px;z-index:2;width:48px;height:48px;border:0;border-radius:50%;background:#fff;color:#111;font-size:28px;font-weight:900;cursor:pointer}
+
+
+.pomato-modal{display:none;position:fixed;inset:0;z-index:10030;background:rgba(0,0,0,.9);align-items:center;justify-content:center;padding:18px}
+.pomato-modal.show{display:flex}
+.pomato-box{position:relative;width:min(96vw,900px);text-align:center}
+.pomato-box video{width:100%;max-height:86vh;border-radius:20px;background:#000;box-shadow:0 20px 70px #000;border:3px solid #fff}
+.close-pomato{position:absolute;right:-8px;top:-8px;z-index:2;width:48px;height:48px;border:0;border-radius:50%;background:#fff;color:#111;font-size:28px;font-weight:900;cursor:pointer}
+
+
+.carrot-modal{display:none;position:fixed;inset:0;z-index:10040;background:rgba(0,0,0,.9);align-items:center;justify-content:center;padding:18px}
+.carrot-modal.show{display:flex}
+.carrot-box{position:relative;width:min(96vw,900px);text-align:center}
+.carrot-box video{width:100%;max-height:86vh;border-radius:20px;background:#000;box-shadow:0 20px 70px #000;border:3px solid #fff}
+.close-carrot{position:absolute;right:-8px;top:-8px;z-index:2;width:48px;height:48px;border:0;border-radius:50%;background:#fff;color:#111;font-size:28px;font-weight:900;cursor:pointer}
+
+.vote-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:20px 0}.vote-btn{padding:18px;border:0;border-radius:16px;font-weight:800;font-size:1rem;cursor:pointer;background:white;box-shadow:0 4px 14px #0002}.vote-btn.chosen{outline:4px solid #333}.vote-message{text-align:center;font-weight:800;margin:15px}.results{background:white;padding:18px;border-radius:16px}.vote-row{display:grid;grid-template-columns:1.5fr 3fr 80px;gap:10px;align-items:center;margin:12px 0}.vote-track{height:25px;background:#eee;border-radius:20px;overflow:hidden}.vote-fill{height:100%;background:#74c0fc;transition:.3s}.vote-num{font-weight:800}.teacher-note{background:#fff4cc;padding:12px;border-radius:10px;margin-top:16px}@media(max-width:650px){.vote-grid{grid-template-columns:1fr}.vote-row{grid-template-columns:1fr}}
+/* 투표 결과 가독성 강화 */
+.vote-card{background:#eef7ff!important;border:3px solid #1c7ed6!important}
+.vote-card h2{color:#0b3d91!important}
+.vote-question{color:#102a43!important}
+.results{background:#102a43!important;color:#fff!important;border:3px solid #74c0fc!important;box-shadow:0 8px 24px rgba(0,0,0,.18)!important}
+.results h3{color:#fff!important;font-size:1.35rem!important}
+.vote-row{background:#fff!important;color:#111!important;padding:10px 12px!important;border-radius:12px!important}
+.vote-track{background:#d9e2ec!important;border:2px solid #829ab1!important;height:30px!important}
+.vote-fill{background:linear-gradient(90deg,#ff922b,#ff3b30)!important}
+.vote-num{color:#c92a2a!important;font-size:1.05rem!important}
+#voteTotal{color:#ffe066!important;font-size:1.2rem!important;font-weight:900!important;text-align:right!important;margin-top:14px!important}
+.vote-btn{background:#fff!important;color:#102a43!important;border:2px solid #1c7ed6!important}
+.vote-btn.chosen{background:#ffd43b!important;color:#111!important;outline:4px solid #e67700!important}
+
+
+.qtag{display:inline-block;background:#0b3d91;color:white;font-weight:900;letter-spacing:1.5px;padding:8px 14px;border-radius:999px;margin-bottom:10px}
+#liveStatus{margin-top:8px;font-weight:800;color:#0b3d91}
+.ignobel-modal{display:none;position:fixed;inset:0;z-index:10060;background:rgba(0,0,0,.92);align-items:center;justify-content:center;padding:18px}.ignobel-modal.show{display:flex}.ignobel-box{position:relative;width:min(96vw,1000px);text-align:center}.ignobel-box video{width:100%;max-height:86vh;border-radius:20px;background:#000;border:3px solid #fff}.close-ignobel{position:absolute;right:-8px;top:-8px;z-index:2;width:48px;height:48px;border:0;border-radius:50%;background:#fff;font-size:28px;font-weight:900;cursor:pointer}
+.class-select-box{background:#fff;border:3px solid #0b3d91;border-radius:16px;padding:16px;margin:18px 0;text-align:center}
+.class-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin:14px 0}
+.class-btn{padding:12px 6px;border:2px solid #1c7ed6;border-radius:12px;background:#e7f5ff;color:#0b3d91;font-weight:900;font-size:1rem;cursor:pointer}
+.class-btn.active{background:#ffd43b;color:#111;border-color:#e67700;box-shadow:0 0 0 3px #ffe8a1}
+.selected-class{font-weight:900;color:#0b3d91;font-size:1.08rem}
+@media(max-width:700px){.class-grid{grid-template-columns:repeat(4,1fr)}}
+
+</style>
+</head>
+<body><main>
+<header><span class="tag">기술·가정 · 생명기술</span><h1>생명기술, 어디까지 가능할까?</h1><div class="sub">멋쟁이 김혁선생님과 함께하는 첫 시간</div></header>
+
+<section class="card">
+<div class="num">QUESTION 01</div>
+<div class="q">우리는 앞으로 어떤 단원을 배울까?</div>
+<div class="options">
+<button class="option" onclick="unit(this,false)">1) 정보통신기술</button>
+<button class="option" onclick="unit(this,true)">2) 생명기술</button>
+</div><div class="feedback" id="f1"></div>
+</section>
+
+<section class="card">
+<div class="num">QUESTION 02</div>
+<div class="q">멋쟁이 김혁선생님과 함께 하는 수업, 얼마나 기대할까?</div>
+<div class="options" id="expect">
+<button class="option" onclick="expect(this,1)">1) 최고로 기대한다</button>
+<button class="option" onclick="expect(this,2)">2) 기대한다</button>
+<button class="option" onclick="expect(this,3)">3) 관심없다</button>
+</div><div class="feedback" id="f2">※ 하나를 골라 보세요.</div>
+</section>
+
+<section class="card">
+<div class="num">QUESTION 03</div>
+<div class="q">다음 중 가장 관심이 가는 내용은?</div>
+<div class="grid">
+<div class="topic" onclick="showMonkeyVideo(this)"><b>🐒 번쩍 번쩍 빛나는 원숭이</b><p>생물에게 새로운 특징을 나타나게 할 수 있을까?</p></div>
+<div class="topic" onclick="showCloneImage(this)"><b>👨‍👦 나와 거의 똑같은 내 아들</b><p>유전정보와 복제기술은 어디까지 가능할까?</p></div>
+<div class="topic" onclick="showPomatoVideo(this)"><b>🍅 포마토</b><p>서로 다른 생물의 특징을 활용하는 생명기술</p></div>
+<div class="topic" onclick="showCarrotVideo(this)"><b>🥕 당근 배양</b><p>작은 조직에서 새로운 개체를 만들 수 있을까?</p></div>
+</div><div class="feedback" id="f3"></div>
+</section>
+<section class="card vote-card"><div class="qtag">QUESTION 04</div><h2>가장 관심이 가는 생명기술은?</h2>
+<p class="vote-question"><b>4개의 생명기술 사례를 살펴보았습니다.<br>여러분이 가장 관심 있게 느낀 생명기술은 무엇인가요? 하나를 선택해 주세요.</b></p>
+<div class="class-select-box">
+  <b>먼저 자신의 반을 선택하세요.</b>
+  <div class="class-grid">
+    <button type="button" class="class-btn" onclick="selectClass(1)">1반</button>
+    <button type="button" class="class-btn" onclick="selectClass(2)">2반</button>
+    <button type="button" class="class-btn" onclick="selectClass(3)">3반</button>
+    <button type="button" class="class-btn" onclick="selectClass(4)">4반</button>
+    <button type="button" class="class-btn" onclick="selectClass(5)">5반</button>
+    <button type="button" class="class-btn" onclick="selectClass(6)">6반</button>
+    <button type="button" class="class-btn" onclick="selectClass(7)">7반</button>
+    <button type="button" class="class-btn" onclick="selectClass(8)">8반</button>
+  </div>
+  <div id="selectedClass" class="selected-class">선택된 반: 없음</div>
+</div>
+<div class="vote-grid">
+<button class="vote-btn" onclick="voteInterest(0)">🐒 번쩍번쩍 빛나는 원숭이</button>
+<button class="vote-btn" onclick="voteInterest(1)">👨‍👦 나와 거의 똑같은 내 아들</button>
+<button class="vote-btn" onclick="voteInterest(2)">🍅 포마토</button>
+<button class="vote-btn" onclick="voteInterest(3)">🥕 당근 배양</button></div>
+<div id="voteMessage" class="vote-message">하나를 선택해 주세요.</div>
+<div class="results"><h3 id="resultTitle">📊 반을 선택하면 실시간 결과가 표시됩니다</h3><div id="voteBars"></div><div id="voteTotal"></div></div>
+<p class="teacher-note"><b>실시간 학급 투표</b> — 학생들이 선택하면 약 2초 간격으로 전체 결과가 갱신됩니다.
+<div id="liveStatus">서버 주소를 설정하면 실시간 집계가 시작됩니다.</div></p>
+</section>
+
+<section class="card">
+<div class="num">TODAY'S STORY</div>
+<div class="q">오늘 이 질문들의 비밀을 찾아가 보자</div>
+<div class="reveal">
+<b>세포 → 핵 → 염색체 → DNA → 유전자 → 생명기술</b><br><br>
+생명체의 작은 세포에서 출발해, 유전정보를 사람이 어떻게 활용하는지 알아봅니다.
+</div>
+</section>
+
+<section class="card">
+<div class="num">BONUS</div>
+<div class="q">이그노벨상 소개</div>
+<p style="color:var(--muted);font-size:18px">기발하고 재미있는 연구 사례를 영상으로 만나봅니다.</p>
+<a class="video" href="javascript:void(0)" target="_blank" rel="noopener" onclick="showIgnobelVideo(); return false;">▶ 영상 열기</a>
+</section>
+
+
+<div class="dokkaebi-modal" id="dokkaebiModal" onclick="closeDokkaebi(event)">
+  <div class="dokkaebi-box">
+    <button class="close-dokkaebi" onclick="hideDokkaebi()" aria-label="닫기">×</button>
+    <img alt="수행평가 10점 감점 도깨비" src="goblin.png">
+  </div>
+</div>
+
+
+<div class="clone-modal" id="cloneModal" onclick="closeClone(event)">
+  <div class="clone-box">
+    <button class="close-clone" onclick="hideClone()" aria-label="닫기">×</button>
+    <img alt="나와 거의 똑같은 내 아들" src="clone.png">
+  </div>
+</div>
+
+
+<div class="monkey-modal" id="monkeyModal" onclick="closeMonkey(event)">
+  <div class="monkey-box">
+    <button class="close-monkey" onclick="hideMonkeyVideo()" aria-label="닫기">×</button>
+    <video id="monkeyVideo" controls playsinline preload="metadata">
+      <source src="1.mp4" type="video/mp4">
+      이 브라우저에서는 영상을 재생할 수 없습니다.
+    </video>
+  </div>
+</div>
+
+
+<div class="pomato-modal" id="pomatoModal" onclick="closePomato(event)">
+  <div class="pomato-box">
+    <button class="close-pomato" onclick="hidePomatoVideo()" aria-label="닫기">×</button>
+    <video id="pomatoVideo" controls playsinline preload="metadata">
+      <source src="3_web.mp4" type="video/mp4">
+      이 브라우저에서는 영상을 재생할 수 없습니다.
+    </video>
+  </div>
+</div>
+
+
+<div class="carrot-modal" id="carrotModal" onclick="closeCarrot(event)">
+  <div class="carrot-box">
+    <button class="close-carrot" onclick="hideCarrotVideo()" aria-label="닫기">×</button>
+    <video id="carrotVideo" controls playsinline preload="metadata">
+      <source src="4.mp4" type="video/mp4">
+      이 브라우저에서는 영상을 재생할 수 없습니다.
+    </video>
+  </div>
+</div>
+
+
+<div class="ignobel-modal" id="ignobelModal" onclick="closeIgnobel(event)"><div class="ignobel-box"><button class="close-ignobel" onclick="hideIgnobelVideo()">×</button><video id="ignobelVideo" controls playsinline preload="metadata"><source src="ignobel_web.mp4" type="video/mp4"></video></div></div><footer>생명기술 첫 시간 · 참여형 수업 자료</footer>
+</main>
+<script>
+function clearButtons(box){[...box.querySelectorAll('.option')].forEach(b=>{b.classList.remove('good','bad');b.disabled=false})}
+function unit(btn,ok){
+ const box=btn.parentElement; clearButtons(box); btn.classList.add(ok?'good':'bad');
+ document.getElementById('f1').textContent=ok?'정답! 오늘부터 생명기술의 세계로 들어갑니다.':'다시 생각해 보세요!';
+}
+function expect(btn,n){
+ const box=document.getElementById('expect');
+ [...box.children].forEach(b=>b.classList.remove('good','bad'));
+ if(n===1){
+   btn.classList.add('good');
+   document.getElementById('f2').textContent='좋습니다! 1번 선택 완료 😄';
+ } else {
+   btn.classList.add('bad');
+   document.getElementById('f2').textContent='앗! 수행평가 10점 감점?! 😈';
+   document.getElementById('dokkaebiModal').classList.add('show');
+ }
+}
+function hideDokkaebi(){
+ document.getElementById('dokkaebiModal').classList.remove('show');
+}
+function closeDokkaebi(e){
+ if(e.target.id==='dokkaebiModal') hideDokkaebi();
+}
+
+
+
+
+function showCarrotVideo(el){
+ document.querySelectorAll('.topic').forEach(x=>x.classList.remove('selected'));
+ el.classList.add('selected');
+ document.getElementById('f3').textContent='당근 배양 영상을 재생합니다.';
+ const modal=document.getElementById('carrotModal');
+ const v=document.getElementById('carrotVideo');
+ modal.classList.add('show');
+ v.currentTime=0;
+ v.play().catch(()=>{});
+}
+function hideCarrotVideo(){
+ const modal=document.getElementById('carrotModal');
+ const v=document.getElementById('carrotVideo');
+ v.pause();
+ modal.classList.remove('show');
+}
+function closeCarrot(e){
+ if(e.target.id==='carrotModal') hideCarrotVideo();
+}
+
+function showPomatoVideo(el){
+ document.querySelectorAll('.topic').forEach(x=>x.classList.remove('selected'));
+ el.classList.add('selected');
+ document.getElementById('f3').textContent='포마토 영상을 재생합니다.';
+ const modal=document.getElementById('pomatoModal');
+ const v=document.getElementById('pomatoVideo');
+ modal.classList.add('show');
+ v.currentTime=0;
+ v.play().catch(()=>{});
+}
+function hidePomatoVideo(){
+ const modal=document.getElementById('pomatoModal');
+ const v=document.getElementById('pomatoVideo');
+ v.pause();
+ modal.classList.remove('show');
+}
+function closePomato(e){
+ if(e.target.id==='pomatoModal') hidePomatoVideo();
+}
+
+function showMonkeyVideo(el){
+ document.querySelectorAll('.topic').forEach(x=>x.classList.remove('selected'));
+ el.classList.add('selected');
+ document.getElementById('f3').textContent='번쩍 번쩍 빛나는 원숭이 영상을 재생합니다.';
+ const modal=document.getElementById('monkeyModal');
+ const v=document.getElementById('monkeyVideo');
+ modal.classList.add('show');
+ v.currentTime=0;
+ v.play().catch(()=>{});
+}
+function hideMonkeyVideo(){
+ const modal=document.getElementById('monkeyModal');
+ const v=document.getElementById('monkeyVideo');
+ v.pause();
+ modal.classList.remove('show');
+}
+function closeMonkey(e){
+ if(e.target.id==='monkeyModal') hideMonkeyVideo();
+}
+
+function showCloneImage(el){
+ document.querySelectorAll('.topic').forEach(x=>x.classList.remove('selected'));
+ el.classList.add('selected');
+ document.getElementById('f3').textContent='나와 거의 똑같은 내 아들 이미지를 확인해 보세요.';
+ document.getElementById('cloneModal').classList.add('show');
+}
+function hideClone(){ document.getElementById('cloneModal').classList.remove('show'); }
+function closeClone(e){ if(e.target.id==='cloneModal') hideClone(); }
+
+function pickVideo(el,url){
+ document.querySelectorAll('.topic').forEach(x=>x.classList.remove('selected'));
+ el.classList.add('selected');
+ document.getElementById('f3').textContent='번쩍 번쩍 빛나는 원숭이 영상으로 이동합니다.';
+ window.open(url,'_blank');
+}
+function pick(el){
+ document.querySelectorAll('.topic').forEach(x=>x.classList.remove('selected')); el.classList.add('selected');
+ document.getElementById('f3').textContent='선택 완료! 왜 이 내용이 궁금한지도 옆 친구와 이야기해 보세요.';
+}
+const interestLabels=['🐒 번쩍번쩍 빛나는 원숭이','👨‍👦 나와 거의 똑같은 내 아들','🍅 포마토','🥕 당근 배양'];
+const VOTE_API="https://hyokk-ai-server.kimhyokk.workers.dev";
+
+let interestVotes=[0,0,0,0];
+let selectedClass=null;
+let voterId=localStorage.getItem('biotech-voter-id');
+if(!voterId){
+ voterId=crypto.randomUUID ? crypto.randomUUID() : Date.now()+"-"+Math.random();
+ localStorage.setItem('biotech-voter-id',voterId);
+}
+
+function renderInterestVotes(){
+ const total=interestVotes.reduce((a,b)=>a+b,0);
+ const box=document.getElementById('voteBars');
+ if(!box)return;
+ box.innerHTML=interestLabels.map((x,i)=>{
+  const p=total?Math.round(interestVotes[i]*100/total):0;
+  return `<div class="vote-row"><b>${x}</b><div class="vote-track"><div class="vote-fill" style="width:${p}%"></div></div><div class="vote-num">${interestVotes[i]}명 (${p}%)</div></div>`;
+ }).join('');
+ document.getElementById('voteTotal').textContent=`총 ${total}명 참여`;
+}
+
+function selectClass(n){
+ selectedClass=n;
+ document.querySelectorAll('.class-btn').forEach((b,i)=>b.classList.toggle('active',i===n-1));
+ document.getElementById('selectedClass').textContent=`선택된 반: ${n}반`;
+ document.getElementById('resultTitle').textContent=`📊 ${n}반 실시간 선택 결과`;
+ document.querySelectorAll('.vote-btn').forEach(b=>b.classList.remove('chosen'));
+ document.getElementById('voteMessage').textContent='관심 있는 생명기술 하나를 선택해 주세요.';
+ refreshVotes();
+}
+
+async function voteInterest(i){
+ if(!selectedClass){
+  document.getElementById('voteMessage').textContent='⚠ 먼저 자신의 반을 선택하세요.';
+  return;
+ }
+ document.querySelectorAll('.vote-btn').forEach((b,n)=>b.classList.toggle('chosen',n===i));
+ document.getElementById('voteMessage').textContent=`${selectedClass}반 선택: ${interestLabels[i]}`;
+ try{
+  const r=await fetch(VOTE_API+"/vote",{
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({classNumber:selectedClass,voterId,choice:i})
+  });
+  const data=await r.json();
+  if(!r.ok) throw new Error(data.error||'vote failed');
+  interestVotes=data.votes;
+  renderInterestVotes();
+  document.getElementById('liveStatus').textContent=`● ${selectedClass}반 실시간 연결됨`;
+ }catch(e){
+  document.getElementById('liveStatus').textContent='⚠ 투표 서버 연결을 확인해 주세요.';
+ }
+}
+
+async function refreshVotes(){
+ if(!selectedClass)return;
+ try{
+  const r=await fetch(`${VOTE_API}/results?class=${selectedClass}`,{cache:'no-store'});
+  const data=await r.json();
+  if(!r.ok) throw new Error(data.error||'result failed');
+  interestVotes=data.votes;
+  renderInterestVotes();
+  document.getElementById('liveStatus').textContent=`● ${selectedClass}반 실시간 연결됨`;
+ }catch(e){
+  document.getElementById('liveStatus').textContent='⚠ 결과 서버 연결을 확인해 주세요.';
+ }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+ renderInterestVotes();
+ setInterval(()=>{if(selectedClass)refreshVotes();},2000);
+});
+function showIgnobelVideo(){const m=document.getElementById('ignobelModal'),v=document.getElementById('ignobelVideo');m.classList.add('show');v.currentTime=0;v.play().catch(()=>{});}function hideIgnobelVideo(){const m=document.getElementById('ignobelModal'),v=document.getElementById('ignobelVideo');v.pause();m.classList.remove('show');}function closeIgnobel(e){if(e.target.id==='ignobelModal')hideIgnobelVideo();}</script></body></html>
