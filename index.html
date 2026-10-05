@@ -81,6 +81,29 @@ footer{text-align:center;color:#9fb7cf;margin-top:40px}
 .selected-class{font-weight:900;color:#0b3d91;font-size:1.08rem}
 @media(max-width:700px){.class-grid{grid-template-columns:repeat(4,1fr)}}
 
+
+/* 반별 익명 질문방 */
+.chat-entry{margin-top:18px;padding:18px;border-radius:16px;background:#eef7ff;border:2px solid #74c0fc;text-align:center}
+.chat-entry h3{margin:0 0 8px;color:#0b3d91}
+.chat-enter-btn{border:0;border-radius:14px;padding:14px 22px;font-size:1.05rem;font-weight:900;background:#0b3d91;color:white;cursor:pointer}
+.chat-enter-btn:disabled{background:#adb5bd;cursor:not-allowed}
+.chat-help{margin:10px 0 0;color:#52606d;font-weight:700}
+.chat-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center;padding:16px}
+.chat-modal.show{display:flex}
+.chat-box{width:min(720px,96vw);height:min(720px,88vh);background:white;border-radius:20px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px #0006}
+.chat-head{background:#0b3d91;color:white;padding:16px 18px;display:flex;justify-content:space-between;align-items:center}
+.chat-head h2{margin:0;font-size:1.25rem}
+.chat-close{border:0;background:white;color:#0b3d91;border-radius:50%;width:36px;height:36px;font-size:24px;cursor:pointer}
+.chat-notice{padding:10px 16px;background:#fff4cc;font-weight:700;font-size:.92rem}
+.chat-messages{flex:1;overflow:auto;padding:14px;background:#f4f7fb}
+.chat-msg{background:white;border-radius:13px;padding:10px 12px;margin:8px 0;box-shadow:0 2px 8px #0001}
+.chat-msg .who{font-weight:900;color:#0b3d91;margin-bottom:4px}
+.chat-msg .time{font-size:.78rem;color:#868e96;margin-left:8px}
+.chat-empty{text-align:center;color:#748094;padding:40px 10px}
+.chat-compose{display:flex;gap:8px;padding:12px;border-top:1px solid #dee2e6;background:white}
+.chat-compose input{flex:1;padding:13px;border:2px solid #ced4da;border-radius:12px;font-size:1rem}
+.chat-compose button{border:0;border-radius:12px;padding:0 18px;background:#1c7ed6;color:white;font-weight:900;cursor:pointer}
+
 </style>
 </head>
 <body><main>
@@ -138,6 +161,11 @@ footer{text-align:center;color:#9fb7cf;margin-top:40px}
 <button class="vote-btn" onclick="voteInterest(3)">🥕 당근 배양</button></div>
 <div id="voteMessage" class="vote-message">하나를 선택해 주세요.</div>
 <div class="results"><h3 id="resultTitle">📊 반을 선택하면 실시간 결과가 표시됩니다</h3><div id="voteBars"></div><div id="voteTotal"></div></div>
+<div class="chat-entry">
+  <h3>💬 우리 반 익명 질문방</h3>
+  <button type="button" id="chatEnterBtn" class="chat-enter-btn" onclick="openClassChat()" disabled>먼저 자신의 반을 선택하세요</button>
+  <p id="chatHelp" class="chat-help">위에서 자신의 반을 선택하면 해당 반 채팅방에 들어갈 수 있습니다.</p>
+</div>
 <p class="teacher-note"><b>실시간 학급 투표</b> — 학생들이 선택하면 약 2초 간격으로 전체 결과가 갱신됩니다.
 <div id="liveStatus">서버 주소를 설정하면 실시간 집계가 시작됩니다.</div></p>
 </section>
@@ -158,6 +186,24 @@ footer{text-align:center;color:#9fb7cf;margin-top:40px}
 <a class="video" href="javascript:void(0)" target="_blank" rel="noopener" onclick="showIgnobelVideo(); return false;">▶ 영상 열기</a>
 </section>
 
+
+
+<div class="chat-modal" id="classChatModal" onclick="closeClassChatOutside(event)">
+  <div class="chat-box">
+    <div class="chat-head">
+      <h2 id="chatRoomTitle">💬 우리 반 익명 질문방</h2>
+      <button class="chat-close" onclick="closeClassChat()" aria-label="닫기">×</button>
+    </div>
+    <div class="chat-notice">익명 질문방입니다. 수업과 관련된 질문과 의견을 서로 존중하며 작성해 주세요.</div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-empty">채팅 서버 연결 준비 중입니다.</div>
+    </div>
+    <div class="chat-compose">
+      <input id="chatInput" maxlength="200" placeholder="질문이나 의견을 입력하세요" onkeydown="if(event.key==='Enter') sendClassChat()">
+      <button type="button" onclick="sendClassChat()">보내기</button>
+    </div>
+  </div>
+</div>
 
 <div class="dokkaebi-modal" id="dokkaebiModal" onclick="closeDokkaebi(event)">
   <div class="dokkaebi-box">
@@ -346,6 +392,12 @@ function selectClass(n){
  document.getElementById('resultTitle').textContent=`📊 ${n}반 실시간 선택 결과`;
  document.querySelectorAll('.vote-btn').forEach(b=>b.classList.remove('chosen'));
  document.getElementById('voteMessage').textContent='관심 있는 생명기술 하나를 선택해 주세요.';
+ const chatBtn=document.getElementById('chatEnterBtn');
+ if(chatBtn){
+   chatBtn.disabled=false;
+   chatBtn.textContent=`${n}반 익명 질문방 들어가기`;
+   document.getElementById('chatHelp').textContent=`${n}반을 선택했습니다. 이 반의 익명 질문방에 입장할 수 있습니다.`;
+ }
  refreshVotes();
 }
 
@@ -390,4 +442,77 @@ document.addEventListener('DOMContentLoaded',()=>{
  renderInterestVotes();
  setInterval(()=>{if(selectedClass)refreshVotes();},2000);
 });
-function showIgnobelVideo(){const m=document.getElementById('ignobelModal'),v=document.getElementById('ignobelVideo');m.classList.add('show');v.currentTime=0;v.play().catch(()=>{});}function hideIgnobelVideo(){const m=document.getElementById('ignobelModal'),v=document.getElementById('ignobelVideo');v.pause();m.classList.remove('show');}function closeIgnobel(e){if(e.target.id==='ignobelModal')hideIgnobelVideo();}</script></body></html>
+function showIgnobelVideo(){const m=document.getElementById('ignobelModal'),v=document.getElementById('ignobelVideo');m.classList.add('show');v.currentTime=0;v.play().catch(()=>{});}function hideIgnobelVideo(){const m=document.getElementById('ignobelModal'),v=document.getElementById('ignobelVideo');v.pause();m.classList.remove('show');}function closeIgnobel(e){if(e.target.id==='ignobelModal')hideIgnobelVideo();}
+// ===== 반별 실시간 익명 질문방 =====
+let anonymousName=localStorage.getItem('biotech-chat-name');
+if(!anonymousName){
+  anonymousName='익명'+String(Math.floor(1000+Math.random()*9000));
+  localStorage.setItem('biotech-chat-name',anonymousName);
+}
+let chatTimer=null, chatSending=false;
+
+function openClassChat(){
+  if(!selectedClass){ document.getElementById('voteMessage').textContent='⚠ 먼저 자신의 반을 선택하세요.'; return; }
+  document.getElementById('chatRoomTitle').textContent=`💬 ${selectedClass}반 익명 질문방 · ${anonymousName}`;
+  document.getElementById('classChatModal').classList.add('show');
+  loadClassChat(true);
+  if(chatTimer) clearInterval(chatTimer);
+  chatTimer=setInterval(()=>loadClassChat(false),2000);
+  document.getElementById('chatInput').focus();
+}
+function closeClassChat(){
+  document.getElementById('classChatModal').classList.remove('show');
+  if(chatTimer){ clearInterval(chatTimer); chatTimer=null; }
+}
+function closeClassChatOutside(e){ if(e.target.id==='classChatModal') closeClassChat(); }
+function formatChatTime(ms){ return new Date(ms).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}); }
+
+function renderClassChat(messages,forceBottom=false){
+  const box=document.getElementById('chatMessages');
+  const nearBottom=box.scrollHeight-box.scrollTop-box.clientHeight<80;
+  if(!Array.isArray(messages)||messages.length===0){
+    box.innerHTML='<div class="chat-empty">아직 메시지가 없습니다. 첫 질문을 남겨보세요.</div>'; return;
+  }
+  box.innerHTML='';
+  messages.forEach(m=>{
+    const div=document.createElement('div'); div.className='chat-msg';
+    const who=document.createElement('div'); who.className='who'; who.textContent=String(m.name||'익명');
+    const time=document.createElement('span'); time.className='time'; time.textContent=formatChatTime(m.time||Date.now()); who.appendChild(time);
+    const body=document.createElement('div'); body.textContent=String(m.message||'');
+    div.appendChild(who); div.appendChild(body); box.appendChild(div);
+  });
+  if(forceBottom||nearBottom) box.scrollTop=box.scrollHeight;
+}
+
+async function loadClassChat(forceBottom=false){
+  if(!selectedClass) return;
+  try{
+    const r=await fetch(`${VOTE_API}/chat?class=${selectedClass}`,{cache:'no-store'});
+    const data=await r.json();
+    if(!r.ok) throw new Error(data.error||'채팅 내용을 불러오지 못했습니다.');
+    renderClassChat(data.messages,forceBottom);
+  }catch(e){
+    const box=document.getElementById('chatMessages');
+    if(!box.querySelector('.chat-msg')) box.innerHTML='<div class="chat-empty">채팅 서버에 연결하지 못했습니다. 잠시 후 다시 시도해 주세요.</div>';
+  }
+}
+
+async function sendClassChat(){
+  if(chatSending||!selectedClass) return;
+  const input=document.getElementById('chatInput'), text=input.value.trim();
+  if(!text) return;
+  if(text.length>200){ alert('메시지는 200자 이내로 작성해 주세요.'); return; }
+  chatSending=true;
+  const btn=input.parentElement.querySelector('button'); btn.disabled=true;
+  try{
+    const r=await fetch(VOTE_API+'/chat/send',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({classNumber:selectedClass,name:anonymousName,message:text})
+    });
+    const data=await r.json();
+    if(!r.ok) throw new Error(data.error||'메시지 전송에 실패했습니다.');
+    input.value=''; await loadClassChat(true); input.focus();
+  }catch(e){ alert(e.message); }
+  finally{ chatSending=false; btn.disabled=false; }
+}
+</script></body></html>
