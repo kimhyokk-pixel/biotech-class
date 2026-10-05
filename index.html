@@ -114,6 +114,30 @@ footer{text-align:center;color:#9fb7cf;margin-top:40px}
 .chat-compose input{color:#172b4d;background:#fff;}
 .chat-compose input::placeholder{color:#7b8794;}
 
+
+/* 채팅 가독성 최종 강제 보정 */
+#classChatModal .chat-notice{
+  color:#5b4300 !important;
+  opacity:1 !important;
+}
+#classChatModal .chat-msg{
+  color:#111827 !important;
+  background:#ffffff !important;
+  opacity:1 !important;
+}
+#classChatModal .chat-msg > div:last-child{
+  color:#111827 !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  font-weight:700 !important;
+  font-size:1rem !important;
+}
+#classChatModal #chatInput{
+  color:#111827 !important;
+  background:#ffffff !important;
+  opacity:1 !important;
+}
+
 </style>
 </head>
 <body><main>
@@ -488,7 +512,12 @@ function renderClassChat(messages,forceBottom=false){
     const div=document.createElement('div'); div.className='chat-msg';
     const who=document.createElement('div'); who.className='who'; who.textContent=String(m.name||'익명');
     const time=document.createElement('span'); time.className='time'; time.textContent=formatChatTime(m.time||Date.now()); who.appendChild(time);
-    const body=document.createElement('div'); body.textContent=String(m.message||'');
+    const body=document.createElement('div');
+    body.textContent=String(m.message||'');
+    body.style.setProperty('color','#111827','important');
+    body.style.setProperty('font-weight','700','important');
+    body.style.setProperty('opacity','1','important');
+    body.style.setProperty('visibility','visible','important');
     div.appendChild(who); div.appendChild(body); box.appendChild(div);
   });
   if(forceBottom||nearBottom) box.scrollTop=box.scrollHeight;
